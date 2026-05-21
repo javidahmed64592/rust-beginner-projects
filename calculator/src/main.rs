@@ -1,18 +1,18 @@
 use std::env;
 
-fn calculate(a: f64, o: &str, b: f64) -> Result<f64, String> {
+fn calculate(a: f64, o: &str, b: f64) -> Result<f64, &str> {
     match o {
         "+" => Ok(a + b),
         "-" => Ok(a - b),
         "*" => Ok(a * b),
         "/" => {
             if b == 0.0 {
-                Err("Division by zero!".to_string())
+                Err("Division by zero!")
             } else {
                 Ok(a / b)
             }
         }
-        &_ => Err("Invalid operator!".to_string()),
+        &_ => Err("Invalid operator!"),
     }
 }
 
