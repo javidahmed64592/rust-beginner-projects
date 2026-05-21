@@ -26,7 +26,7 @@ fn main() {
 
     let result = calculate(*a, o, *b);
 
-    println!("{}", result.unwrap().to_string());
+    println!("{}", result.unwrap());
 }
 
 #[cfg(test)]
