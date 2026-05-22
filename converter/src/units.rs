@@ -19,7 +19,7 @@ impl std::str::FromStr for TempUnit {
 }
 
 impl TempUnit {
-    pub fn to_kelvin(&self, v: f64) -> f64 {
+    pub fn value_to_kelvin(&self, v: f64) -> f64 {
         match &self {
             TempUnit::Celsius => v + 273.15,
             TempUnit::Fahrenheit => (v + 459.67) * (5.0 / 9.0),
@@ -27,7 +27,7 @@ impl TempUnit {
         }
     }
 
-    pub fn from_kelvin(&self, v: f64) -> f64 {
+    pub fn value_from_kelvin(&self, v: f64) -> f64 {
         match &self {
             TempUnit::Celsius => v - 273.15,
             TempUnit::Fahrenheit => (v * (9.0 / 5.0)) - 459.67,
@@ -43,13 +43,13 @@ pub struct Temperature {
 
 impl Temperature {
     pub fn convert_to(&self, target: TempUnit) -> Temperature {
-        let value_kelvin = self.unit.to_kelvin(self.value);
-        let value_target = target.from_kelvin(value_kelvin);
+        let value_kelvin = self.unit.value_to_kelvin(self.value);
+        let value_target = target.value_from_kelvin(value_kelvin);
 
-        return Temperature {
+        Temperature {
             value: value_target,
             unit: target,
-        };
+        }
     }
 }
 
@@ -89,37 +89,37 @@ mod temp_unit_convert_tests {
     #[test]
     fn test_celsius_to_kelvin() {
         let t = TempUnit::Celsius;
-        assert_eq!(t.to_kelvin(0.0), 273.15);
+        assert_eq!(t.value_to_kelvin(0.0), 273.15);
     }
 
     #[test]
     fn test_celsius_from_kelvin() {
         let t = TempUnit::Celsius;
-        assert_eq!(t.from_kelvin(0.0), -273.15);
+        assert_eq!(t.value_from_kelvin(0.0), -273.15);
     }
 
     #[test]
     fn test_fahrenheit_to_kelvin() {
         let t = TempUnit::Fahrenheit;
-        assert!(t.to_kelvin(0.0) - 255.3722 < 0.01);
+        assert!(t.value_to_kelvin(0.0) - 255.3722 < 0.01);
     }
 
     #[test]
     fn test_fahrenheit_from_kelvin() {
         let t = TempUnit::Fahrenheit;
-        assert!(t.from_kelvin(258.15) - 5.0 < 0.01);
+        assert!(t.value_from_kelvin(258.15) - 5.0 < 0.01);
     }
 
     #[test]
     fn test_kelvin_to_kelvin() {
         let t = TempUnit::Kelvin;
-        assert_eq!(t.to_kelvin(10.0), 10.0);
+        assert_eq!(t.value_to_kelvin(10.0), 10.0);
     }
 
     #[test]
     fn test_kelvin_from_kelvin() {
         let t = TempUnit::Kelvin;
-        assert_eq!(t.from_kelvin(10.0), 10.0);
+        assert_eq!(t.value_from_kelvin(10.0), 10.0);
     }
 }
 
