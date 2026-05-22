@@ -19,12 +19,28 @@ fn calculate(a: f64, o: &str, b: f64) -> Result<f64, &str> {
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let num_args = args.len();
-    let a = &args[num_args - 3].parse().unwrap();
-    let o = &args[num_args - 2];
-    let b = &args[num_args - 1].parse().unwrap();
+    if args.len() != 4 {
+        eprintln!("Usage: calculator <number> <operator> <number>");
+        std::process::exit(1);
+    }
 
-    let result = calculate(*a, o, *b);
+    let a = match args[1].parse::<f64>() {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("Invalid value: {} (expected a number)", args[1]);
+            std::process::exit(1);
+        }
+    };
+    let o = &args[2];
+    let b = match args[3].parse::<f64>() {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("Invalid value: {} (expected a number)", args[3]);
+            std::process::exit(1);
+        }
+    };
+
+    let result = calculate(a, o, b);
 
     println!("{}", result.unwrap());
 }
