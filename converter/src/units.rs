@@ -36,6 +36,23 @@ impl TempUnit {
     }
 }
 
+pub struct Temperature {
+    pub value: f64,
+    pub unit: TempUnit,
+}
+
+impl Temperature {
+    pub fn convert_to(&self, target: TempUnit) -> Temperature {
+        let value_kelvin = self.unit.to_kelvin(self.value);
+        let value_target = target.from_kelvin(value_kelvin);
+
+        return Temperature {
+            value: value_target,
+            unit: target,
+        };
+    }
+}
+
 #[cfg(test)]
 mod temp_unit_from_string_tests {
     use super::*;
@@ -104,5 +121,26 @@ mod temp_unit_convert_tests {
     fn test_kelvin_from_kelvin() {
         let t = TempUnit::Kelvin;
         assert_eq!(t.from_kelvin(10.0), 10.0);
+    }
+}
+
+#[cfg(test)]
+mod temperature_convert_tests {
+    use super::*;
+
+    #[test]
+    fn test_convert_temperature() {
+        let v = 10.0;
+        let u1 = TempUnit::Celsius;
+        let u2 = TempUnit::Fahrenheit;
+        let u3 = TempUnit::Kelvin;
+
+        let t1 = Temperature { value: v, unit: u1 };
+        let t2 = t1.convert_to(u2);
+        let t3 = t2.convert_to(u3);
+
+        assert_ne!(t1.value, t2.value);
+        assert_ne!(t2.value, t3.value);
+        assert_ne!(t3.value, t1.value);
     }
 }
