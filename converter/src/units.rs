@@ -1,8 +1,5 @@
-use approx::assert_abs_diff_eq;
-use std::str::FromStr;
-
 #[derive(Debug, PartialEq)]
-enum TempUnit {
+pub enum TempUnit {
     Celsius,
     Fahrenheit,
     Kelvin,
@@ -22,7 +19,7 @@ impl std::str::FromStr for TempUnit {
 }
 
 impl TempUnit {
-    fn to_kelvin(&self, v: f64) -> f64 {
+    pub fn to_kelvin(&self, v: f64) -> f64 {
         match &self {
             TempUnit::Celsius => v + 273.15,
             TempUnit::Fahrenheit => (v + 459.67) * (5.0 / 9.0),
@@ -30,7 +27,7 @@ impl TempUnit {
         }
     }
 
-    fn from_kelvin(&self, v: f64) -> f64 {
+    pub fn from_kelvin(&self, v: f64) -> f64 {
         match &self {
             TempUnit::Celsius => v - 273.15,
             TempUnit::Fahrenheit => (v * (9.0 / 5.0)) - 459.67,
@@ -45,25 +42,25 @@ mod temp_unit_from_string_tests {
 
     #[test]
     fn test_celsius() {
-        let t = TempUnit::from_str("c");
-        assert_eq!(t.unwrap(), TempUnit::Celsius);
+        let t = "C".parse::<TempUnit>().unwrap();
+        assert_eq!(t, TempUnit::Celsius);
     }
 
     #[test]
     fn test_fahrenheit() {
-        let t = TempUnit::from_str("f");
-        assert_eq!(t.unwrap(), TempUnit::Fahrenheit);
+        let t = "F".parse::<TempUnit>().unwrap();
+        assert_eq!(t, TempUnit::Fahrenheit);
     }
 
     #[test]
     fn test_kelvin() {
-        let t = TempUnit::from_str("k");
-        assert_eq!(t.unwrap(), TempUnit::Kelvin);
+        let t = "K".parse::<TempUnit>().unwrap();
+        assert_eq!(t, TempUnit::Kelvin);
     }
 
     #[test]
     fn test_unknown_unit() {
-        let t = TempUnit::from_str("a");
+        let t = "A".parse::<TempUnit>();
         assert!(t.is_err());
     }
 }
@@ -71,6 +68,7 @@ mod temp_unit_from_string_tests {
 #[cfg(test)]
 mod temp_unit_convert_tests {
     use super::*;
+    use approx::assert_abs_diff_eq;
 
     #[test]
     fn test_celsius_to_kelvin() {
