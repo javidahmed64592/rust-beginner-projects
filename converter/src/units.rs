@@ -85,7 +85,6 @@ mod temp_unit_from_string_tests {
 #[cfg(test)]
 mod temp_unit_convert_tests {
     use super::*;
-    use approx::assert_abs_diff_eq;
 
     #[test]
     fn test_celsius_to_kelvin() {
@@ -102,13 +101,13 @@ mod temp_unit_convert_tests {
     #[test]
     fn test_fahrenheit_to_kelvin() {
         let t = TempUnit::Fahrenheit;
-        assert_abs_diff_eq!(t.to_kelvin(0.0), 255.3722, epsilon = 0.01);
+        assert!(t.to_kelvin(0.0) - 255.3722 < 0.01);
     }
 
     #[test]
     fn test_fahrenheit_from_kelvin() {
         let t = TempUnit::Fahrenheit;
-        assert_abs_diff_eq!(t.from_kelvin(258.15), 5.0, epsilon = 0.01);
+        assert!(t.from_kelvin(258.15) - 5.0 < 0.01);
     }
 
     #[test]

@@ -6,7 +6,6 @@ members = [
 ]
 
 [workspace.dependencies]
-approx = { version = "0.5.1" }
 
 [workspace.package]
 version = "0.1.0"
